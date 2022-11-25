@@ -1,0 +1,45 @@
+<div class="col-md-12">
+  <div class="card card-container">
+    <form
+      name="form"
+      (ngSubmit)="f.form.valid && onSubmit()"
+      #f="ngForm"
+      novalidate
+    >
+      <div class="form-group">
+        <label for="taskName">TaskName</label>
+        <input
+          type="text"
+          class="form-control"
+          name="taskName"
+          [(ngModel)]="form.taskName"
+          required
+          #taskName="ngModel"
+          [ngClass]="{ 'is-invalid': f.submitted && taskName.errors }"
+        />
+        <div *ngIf="taskName.errors && f.submitted" class="invalid-feedback">
+          TaskName is required!
+        </div>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary btn-block">Search</button>
+      </div>
+    </form>
+  </div>
+  <div class="card card-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of tasks">
+          <th>{{ task.name }}</th>
+          <th>{{ task.description }}</th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

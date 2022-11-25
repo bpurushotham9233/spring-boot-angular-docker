@@ -1,0 +1,77 @@
+<div class="col-md-12">
+  <div class="card card-container">
+    <form
+      name="form"
+      (ngSubmit)="f.form.valid && onSubmit()"
+      #f="ngForm"
+      novalidate
+    >
+      <div class="form-group">
+        <label for="taskName">TaskName</label>
+        <input
+          type="text"
+          class="form-control"
+          name="taskName"
+          [(ngModel)]="form.taskName"
+          required
+          #taskName="ngModel"
+          [ngClass]="{ 'is-invalid': f.submitted && taskName.errors }"
+        />
+        <div *ngIf="taskName.errors && f.submitted" class="invalid-feedback">
+          TaskName is required!
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea
+          type="description"
+          class="form-control"
+          name="description"
+          [(ngModel)]="form.description"
+          required
+          minlength="6"
+          #description="ngModel"
+          [ngClass]="{ 'is-invalid': f.submitted && description.errors }"
+        ></textarea>
+        <div *ngIf="description.errors && f.submitted" class="invalid-feedback">
+          <div *ngIf="description.errors">Description is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary btn-block">
+          {{ isEditable ? "Update" : "Add" }}
+        </button>
+      </div>
+      <div class="form-group">
+        <div
+          *ngIf="f.submitted && isCreadtedFailed"
+          class="alert alert-danger"
+          role="alert"
+        >
+          Task Add Failed {{ errorMessage }}
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="card card-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of tasks">
+          <th>{{ task.name }}</th>
+          <th>{{ task.description }}</th>
+          <th>
+            <button (click)="handleEdit(task.id)">edit</button>
+            <button (click)="handleRemove(task.id)">remove</button>
+          </th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,68 @@
+version: '3'
+services:
+  #************Mongo DB***************
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_DATABASE=asmd_mongo_db
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=passwd
+    volumes:
+      - ./mongodb_data_container:/data/db
+      #means you want to set data on container persist on your local folder named mongo-volume . /data/db/ is a folder that already created inside the mongo container.
+    ports:
+      - 27017:27017
+    # networks:
+    #   - asmd_net
+
+  #************Mongo Express*********
+  mongo_express:
+    container_name: mongo_express
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_MONGODB_AUTH_USERNAME=root
+      - ME_CONFIG_MONGODB_AUTH_PASSWORD=passwd
+      - ME_CONFIG_BASICAUTH_USERNAME=dev
+      - ME_CONFIG_BASICAUTH_PASSWORD=passwd
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+    depends_on:
+      - mongodb
+    # networks:
+    #   - asmd_net
+  #************Backend***************
+  backend_spring:
+    container_name: spring_container
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongodb
+    # networks:
+    #   - asmd_net
+
+  #************Frontend***************
+  frontend_angular:
+    container_name: angular_container
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    ports:
+      - 4200:4200
+    volumes:
+      - ./Frontend:/home/app
+      - /home/app/node_modules
+    depends_on:
+      - backend_spring
+    # networks:
+    #   - asmd_net
+# networks:
+#   asmd_net:
+#     driver: bridge
