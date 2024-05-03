@@ -13,7 +13,7 @@ ENV NODE_OPTIONS=--openssl-legacy-provider
 ENV PATH /home/app/node_modules/.bin:$PATH
 RUN yarn
 # copy in our source code last, as it changes the most
-EXPOSE 4200
+EXPOSE 8082
 ##CMD [ "yarn", "start" ]
 ##COPY --chown=node:node . .
 CMD ng serve --host 0.0.0.0
