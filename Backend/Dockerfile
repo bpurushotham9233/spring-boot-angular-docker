@@ -4,7 +4,7 @@ FROM openjdk:8-jdk-alpine
 VOLUME /tmp
 # We add a file from the local file system, naming it “app.jar.” The renaming isn't necessary, just an option available
 ADD target/*.jar app.jar
-# We state that we want to open port 8080 on the container
+# We state that we want to open port 8082 on the container
 EXPOSE 8082
 # We run a command on the system to “touch” the file. This ensures a file modification date on the app.jar file
 RUN sh -c 'touch /app.jar'
